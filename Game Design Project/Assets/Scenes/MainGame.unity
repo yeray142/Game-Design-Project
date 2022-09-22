@@ -349,7 +349,6 @@ GameObject:
   - component: {fileID: 1411367841}
   - component: {fileID: 1411367840}
   - component: {fileID: 1411367839}
-  - component: {fileID: 1411367844}
   m_Layer: 0
   m_Name: Capsule
   m_TagString: Untagged
@@ -384,9 +383,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 330180d2e21361e4db741e5c8164c324, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controller: {fileID: 1411367840}
-  speed: 8
-  gravity: 9.8
+  _speed: 10
+  _gravity: 0.11
+  _jumpHeight: 18
 --- !u!143 &1411367840
 CharacterController:
   m_ObjectHideFlags: 0
@@ -469,22 +468,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1411367837}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
---- !u!54 &1411367844
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1411367837}
-  serializedVersion: 2
-  m_Mass: 60
-  m_Drag: 4
-  m_AngularDrag: 4
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!1 &1415846764
 GameObject:
   m_ObjectHideFlags: 0
