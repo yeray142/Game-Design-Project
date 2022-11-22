@@ -1,24 +1,27 @@
 using UnityEngine;
-using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.SceneManagement;
-using UnityEditor.Experimental.GraphView;
 
 public class IntroSceneManager : MonoBehaviour
 {
     public GameObject startText;
     float timer;
     bool loadingLevel;
+    bool changingChar;
     bool init;
 
     public int activeElement;
     public GameObject menuObj;
+    public GameObject charactersObj;
     public ButtonRef[] menuOptions;
+    public GameObject[] characterArrows;
 
     // Start is called before the first frame update
     void Start()
     {
         menuObj.SetActive(false);
+        charactersObj.SetActive(false);
+
         startText.SetActive(true);
     }
 
@@ -40,12 +43,14 @@ public class IntroSceneManager : MonoBehaviour
             {
                 init = true;
                 startText.SetActive(false);
+
                 menuObj.SetActive(true);
+                charactersObj.SetActive(true);
             }
         }
         else
         {
-            if (!loadingLevel) // if not loading level
+            if (!loadingLevel && !changingChar) // if not loading level or changing char
             {
                 menuOptions[activeElement].selected = true;
 
@@ -54,31 +59,50 @@ public class IntroSceneManager : MonoBehaviour
                 {
                     menuOptions[activeElement].selected = false;
 
-                    if (activeElement > 0)
-                        activeElement--;
-                    else
-                        activeElement = menuOptions.Length - 1;
+                    if (activeElement != 3 && activeElement != 4)
+                        if (activeElement > 0)
+                            activeElement--;
+                        else
+                            activeElement = menuOptions.Length - 3;
                 }
                 else if (Input.GetKeyUp(KeyCode.DownArrow) || Input.GetKeyUp(KeyCode.S))
                 {
                     menuOptions[activeElement].selected = false;
 
-                    if (activeElement < menuOptions.Length - 1)
-                        activeElement++;
-                    else
+                    if (activeElement != 3 && activeElement != 4)
+                        if (activeElement < menuOptions.Length - 3)
+                            activeElement++;
+                        else
+                            activeElement = 0;
+                }
+                else if (Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.A))
+                {
+                    menuOptions[activeElement].selected = false;
+
+                    if (activeElement == 4)
                         activeElement = 0;
+                    else
+                        activeElement = 3;
+                }
+                else if (Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.D))
+                {
+                    menuOptions[activeElement].selected = false;
+
+                    if (activeElement == 3)
+                        activeElement = 0;
+                    else
+                        activeElement = 4;
                 }
 
                 // If press Space or Enter then go to the next menu or level
                 if (Input.GetKeyUp(KeyCode.Space) || Input.GetKeyUp(KeyCode.KeypadEnter) || Input.GetKeyUp(KeyCode.Return))
                 {
-                    loadingLevel = true;
-
                     // Based on our selection
                     switch (activeElement)
                     {
                         case 0:
                             // Load the level
+                            loadingLevel = true;
                             Debug.Log("load");
                             StartCoroutine("LoadLevel");
                             menuOptions[activeElement].transform.localScale *= 1.2f;
@@ -89,8 +113,29 @@ public class IntroSceneManager : MonoBehaviour
                         case 2:
                             // Open settings menu
                             break;
+                        case 3:
+                            changingChar = true;
+                            characterArrows[0].SetActive(true);
+                            break;
+                        case 4:
+                            changingChar = true;
+                            characterArrows[1].SetActive(true);
+                            break;
+                        default:
+                            break;
                     }
                 }
+            }
+            else if (changingChar)
+            {
+                // Code for changing character
+                if (Input.GetKeyUp(KeyCode.Return))
+                {
+                    changingChar = false;
+                    characterArrows[activeElement - 3].SetActive(false);
+                }
+
+                // TODO: Change character when pressing right or left:
             }
         }
     }
@@ -101,8 +146,6 @@ public class IntroSceneManager : MonoBehaviour
         // CharacterManager.GetInstance().players[1].playerType = PlayerBase.PlyaerType.user;
 
         yield return new WaitForSeconds(0.6f);
-        startText.SetActive(false);
-        yield return new WaitForSeconds(1.5f);
         SceneManager.LoadSceneAsync("MainGame", LoadSceneMode.Single);
     }
 }
