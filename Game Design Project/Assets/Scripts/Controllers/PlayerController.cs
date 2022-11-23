@@ -52,7 +52,7 @@ public class PlayerController : MonoBehaviour
         _controller.Move(velocity * Time.deltaTime);
     }
 
-    public void setGravity(float gravity)
+   public void setGravity(float gravity)
     {
         _gravity = gravity;
     }
