@@ -142,9 +142,6 @@ public class IntroSceneManager : MonoBehaviour
 
     IEnumerator LoadLevel()
     {
-        // CharacterManager.GetInstance().numberOfUsers = 2;
-        // CharacterManager.GetInstance().players[1].playerType = PlayerBase.PlyaerType.user;
-
         yield return new WaitForSeconds(0.6f);
         SceneManager.LoadSceneAsync("MainGame", LoadSceneMode.Single);
     }
