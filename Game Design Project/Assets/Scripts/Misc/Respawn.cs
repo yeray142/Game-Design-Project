@@ -9,7 +9,7 @@ public class Respawn : MonoBehaviour
     private float timeOnHold = 2;
     private bool respawned = false;
     private float initialGravity;
-    private Player2Controller moveScript;
+    private PlayerController moveScript;
     private CharacterController controller;
     private BlinkingObject blinkingObject;
     private GameObject spawn1;
@@ -22,7 +22,7 @@ public class Respawn : MonoBehaviour
 
         spawn1 = GameObject.FindGameObjectWithTag("Spawn1");
         controller = playerObj.GetComponent<CharacterController>();
-        moveScript = playerObj.GetComponent<Player2Controller>();
+        moveScript = playerObj.GetComponent<PlayerController>();
         blinkingObject = playerObj.GetComponent<BlinkingObject>();
         initialGravity = moveScript.getGravity();
         

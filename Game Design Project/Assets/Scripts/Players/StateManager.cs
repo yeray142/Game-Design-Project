@@ -21,6 +21,8 @@ public class StateManager : MonoBehaviour
     public bool onGround;
     public bool lookRight;
 
+    public PlayerController handleMovement;
+
     public Slider healthSlider;
     SpriteRenderer sRenderer;
 
@@ -56,13 +58,13 @@ public class StateManager : MonoBehaviour
 
         if (health <= 0)
         {
-            /*
+            
             if (LevelManager.GetInstance().countdown)
             {
                 LevelManager.GetInstance().EndTurnFunction();
-                handleAnim.anim.Play("Dead");
+                //handleAnim.anim.Play("Dead");
             }
-            */
+            
         }
     }
 

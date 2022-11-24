@@ -45,6 +45,11 @@ public class LevelUI : MonoBehaviour
 
     }
 
+    public void AddWinIndicator(int player)
+    {
+
+    }
+
     void Awake()
     {
         Instance = this;

@@ -27,7 +27,7 @@ public class CharacterManager : MonoBehaviour
     }
 
     // Find player from his character (StateManager)
-    /*public PlayerBase returnPlayerFromStates(StateManager states)
+    public PlayerBase returnPlayerFromStates(StateManager states)
     {
         PlayerBase retVal = null;
 
@@ -39,7 +39,7 @@ public class CharacterManager : MonoBehaviour
             }
 
         return retVal;
-    }*/
+    }
 
     public static CharacterManager instance;
     public static CharacterManager GetInstance()
@@ -66,11 +66,11 @@ public class CharacterBase
 public class PlayerBase
 {
     public string playerId;
-    public string inputId;
+    public int inputId;
     // public PlayerType playerType; // Not needed
     public bool hasCharacter;
     public GameObject playerPrefab;
-    // public StateManager playerStates;
+    public StateManager playerStates;
     public int score;
 
     /*
