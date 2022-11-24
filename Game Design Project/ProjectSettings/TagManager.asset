@@ -8,6 +8,12 @@ TagManager:
   - Player2
   - Spawn2
   - Spawn1
+  - Player1Text
+  - Player2Text
+  - TimeText
+  - Player1Healthbar
+  - Player2Healthbar
+  - AnnouncerTextLine1
   layers:
   - Default
   - TransparentFX
