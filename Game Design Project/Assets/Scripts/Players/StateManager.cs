@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Diagnostics;
-using Unity.XR.OpenVR;
 using UnityEngine;
 using UnityEngine.UI;
 
