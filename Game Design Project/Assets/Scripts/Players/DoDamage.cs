@@ -20,7 +20,10 @@ public class DoDamage : MonoBehaviour
 
             if (oState != states)
             {
-                // oState.TakeDamage(30, damageType);
+                if (!oState.currentlyAttacking)
+                {
+                    // oState.TakeDamage(30, damageType);
+                }
             }
         }
     }
