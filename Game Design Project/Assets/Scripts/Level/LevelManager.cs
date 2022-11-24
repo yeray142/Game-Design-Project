@@ -268,6 +268,7 @@ public class LevelManager : MonoBehaviour
         {
             for(int i = 0; i < charM.plrs.Count; i++)
             {
+                charM.plrs[i].score = 0;
                 charM.plrs[i].hasCharacter = false;
             }
 
@@ -322,5 +323,16 @@ public class LevelManager : MonoBehaviour
         }
 
         return retVal;
+    }
+
+    public static LevelManager instance;
+    public static LevelManager GetInstance()
+    {
+        return instance;
+    }
+
+    void Awake()
+    {
+        instance = this;
     }
 }
