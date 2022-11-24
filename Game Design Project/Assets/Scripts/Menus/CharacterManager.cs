@@ -70,7 +70,7 @@ public class PlayerBase
     // public PlayerType playerType; // Not needed
     public bool hasCharacter;
     public GameObject playerPrefab;
-    //public StateManager playerStates;
+    // public StateManager playerStates;
     public int score;
 
     /*
