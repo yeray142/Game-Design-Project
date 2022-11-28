@@ -44,6 +44,11 @@ public class CharacterManager : MonoBehaviour
     public static CharacterManager instance;
     public static CharacterManager GetInstance()
     {
+        if(instance == null)
+        {
+            instance = new CharacterManager(); 
+        }
+
         return instance;
     }
 

@@ -24,7 +24,9 @@ public class LevelUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if(playerText == null)
+        charM = CharacterManager.GetInstance();
+
+        if (playerText == null)
         {
             playerText = new TextMeshProUGUI[charM.plrs.Count]; 
         }

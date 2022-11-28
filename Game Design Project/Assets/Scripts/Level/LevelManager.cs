@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class LevelManager : MonoBehaviour
 {
     WaitForSeconds oneSec;
-    private Vector3[] spawns;// Spawn positions
+    private Vector3[] spawns; // Spawn positions
 
     CharacterManager charM;
     LevelUI levelUI;
@@ -31,6 +32,7 @@ public class LevelManager : MonoBehaviour
         oneSec = new WaitForSeconds(1);
 
         // Get the Spawn positions
+        spawns = new Vector3[2];
         spawns[0] = GameObject.FindGameObjectWithTag("Spawn1").transform.position;
         spawns[1] = GameObject.FindGameObjectWithTag("Spawn2").transform.position;
 
@@ -45,18 +47,21 @@ public class LevelManager : MonoBehaviour
     {
         // A fast way to handle player orientation in the scene
         // Just compare the x of the first player, if it's lower than the enemy is on the right
-
-        if (charM.plrs[0].playerStates.transform.position.x <
+        if(charM.plrs.Count > 0)
+        {
+            if (charM.plrs[0].playerStates.transform.position.x <
             charM.plrs[1].playerStates.transform.position.x)
-        {
-            charM.plrs[0].playerStates.lookRight = true;
-            charM.plrs[1].playerStates.lookRight = false;
+            {
+                charM.plrs[0].playerStates.lookRight = true;
+                charM.plrs[1].playerStates.lookRight = false;
+            }
+            else
+            {
+                charM.plrs[0].playerStates.lookRight = false;
+                charM.plrs[1].playerStates.lookRight = true;
+            }
         }
-        else
-        {
-            charM.plrs[0].playerStates.lookRight = false;
-            charM.plrs[1].playerStates.lookRight = true;
-        }
+        
     }
 
     // Update is called once per frame
