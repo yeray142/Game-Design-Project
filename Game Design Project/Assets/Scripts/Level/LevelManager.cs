@@ -25,7 +25,7 @@ public class LevelManager : MonoBehaviour
     void Start()
     {
         // Get the references from the Singletons
-        charM = CharacterManager.GetInstance();
+        charM = CharacterManager.Instance;
         levelUI = LevelUI.Instance;
 
         // init for WaitForSeconds

@@ -24,7 +24,7 @@ public class LevelUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        charM = CharacterManager.GetInstance();
+        charM = CharacterManager.Instance;
 
         if (playerText == null)
         {

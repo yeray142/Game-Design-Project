@@ -1,6 +1,7 @@
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CharacterManager : MonoBehaviour
@@ -41,20 +42,18 @@ public class CharacterManager : MonoBehaviour
         return retVal;
     }
 
-    public static CharacterManager instance;
-    public static CharacterManager GetInstance()
-    {
-        if(instance == null)
-        {
-            instance = new CharacterManager(); 
-        }
-
-        return instance;
-    }
+    public static CharacterManager Instance { get; private set; }
 
     void Awake()
     {
-        instance = this;
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            Instance = this;
+        }
         DontDestroyOnLoad(this.gameObject);
     }
 }
