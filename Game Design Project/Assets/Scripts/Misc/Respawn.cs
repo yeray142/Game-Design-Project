@@ -12,34 +12,35 @@ public class Respawn : MonoBehaviour
     private PlayerController moveScript;
     private CharacterController controller;
     private BlinkingObject blinkingObject;
-    private GameObject spawn1;
+    private GameObject spawn;
 
     // Start is called before the first frame update
     void Start()
     {
-        if(playerObj == null)
-            playerObj = GameObject.FindGameObjectWithTag("Player");
+        if (playerObj == null)
+            playerObj = this.gameObject;
 
-        spawn1 = GameObject.FindGameObjectWithTag("Spawn1");
+        spawn = GameObject.FindGameObjectWithTag("Spawn1");
         controller = playerObj.GetComponent<CharacterController>();
         moveScript = playerObj.GetComponent<PlayerController>();
         blinkingObject = playerObj.GetComponent<BlinkingObject>();
         initialGravity = moveScript.getGravity();
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(playerObj != null)
+        if (playerObj != null)
         {
 
             if (respawned)
             {
-                if(timeOnHold > 0)
+                if (timeOnHold > 0)
                 {
                     timeOnHold -= Time.deltaTime;
-                } else
+                }
+                else
                 {
                     blinkingObject.blinkOff();
                     controller.enabled = true;
@@ -47,13 +48,13 @@ public class Respawn : MonoBehaviour
                     respawned = false;
                 }
             }
-            else if(playerObj.transform.position.y <= -7)
+            else if (playerObj.transform.position.y <= -7)
             {
-                
+
                 controller.enabled = false;
                 Debug.Log("falling" + playerObj.transform.position.y);
-                playerObj.transform.position = spawn1.transform.position;
-                
+                playerObj.transform.position = spawn.transform.position;
+
                 respawned = true;
                 timeOnHold = 2;
                 blinkingObject.blinkOn(); // Starts blinking

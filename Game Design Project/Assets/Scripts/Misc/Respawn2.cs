@@ -9,20 +9,20 @@ public class Respawn2 : MonoBehaviour
     private float timeOnHold = 2;
     private bool respawned = false;
     private float initialGravity;
-    private PlayerController moveScript;
+    private Player2Controller moveScript;
     private CharacterController controller;
     private BlinkingObject blinkingObject;
-    private GameObject spawn1;
+    private GameObject spawn;
 
     // Start is called before the first frame update
     void Start()
     {
         if (playerObj == null)
-            playerObj = GameObject.FindGameObjectWithTag("Player2");
+            playerObj = this.gameObject;
 
-        spawn1 = GameObject.FindGameObjectWithTag("Spawn2");
+        spawn = GameObject.FindGameObjectWithTag("Spawn2");
         controller = playerObj.GetComponent<CharacterController>();
-        moveScript = playerObj.GetComponent<PlayerController>();
+        moveScript = playerObj.GetComponent<Player2Controller>();
         blinkingObject = playerObj.GetComponent<BlinkingObject>();
         initialGravity = moveScript.getGravity();
 
@@ -53,7 +53,7 @@ public class Respawn2 : MonoBehaviour
 
                 controller.enabled = false;
                 Debug.Log("falling" + playerObj.transform.position.y);
-                playerObj.transform.position = spawn1.transform.position;
+                playerObj.transform.position = spawn.transform.position;
 
                 respawned = true;
                 timeOnHold = 2;

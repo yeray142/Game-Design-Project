@@ -3,20 +3,20 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class Player2Controller : MonoBehaviour
 {
     private CharacterController _controller;
     [SerializeField]
     private float _speed; // 10
     [SerializeField]
-    private float _gravity; // 0.3
+    private float _gravity; // 0.11
     [SerializeField]
     private float _jumpHeight; // 20
 
     private float _yVelocity;
     private bool _canDoubleJump;
 
-    private KeyCode upKey = KeyCode.W;
+    private KeyCode upKey = KeyCode.UpArrow;
 
     // Start is called before the first frame update
     void Start()
@@ -29,7 +29,7 @@ public class PlayerController : MonoBehaviour
     {
         if (_controller != null)
         {
-            float hInput = Input.GetAxis("Horizontal");
+            float hInput = Input.GetAxis("Horizontal2");
             Vector3 direction = new Vector3(hInput, 0, 0);
             Vector3 velocity = direction * _speed;
 

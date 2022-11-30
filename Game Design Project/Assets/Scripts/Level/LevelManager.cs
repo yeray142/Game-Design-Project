@@ -183,7 +183,6 @@ public class LevelManager : MonoBehaviour
         {
             // For user players, enable the input handler for example
             PlayerController controller = charM.plrs[i].playerStates.gameObject.GetComponent<PlayerController>();
-            controller.playerInput = charM.plrs[i].inputId;
             controller.enabled = true;
         }
 
