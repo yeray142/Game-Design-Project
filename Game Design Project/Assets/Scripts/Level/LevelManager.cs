@@ -147,7 +147,7 @@ public class LevelManager : MonoBehaviour
                 Quaternion.identity
                 ) as GameObject;
 
-            charM.plrs[i].playerStates = go.GetComponent <StateManager>();
+            charM.plrs[i].playerStates = go.GetComponent<StateManager>();
             charM.plrs[i].playerStates.healthSlider = levelUI.playerHealthbar[i];
         }
 

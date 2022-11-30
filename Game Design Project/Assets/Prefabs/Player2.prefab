@@ -41,6 +41,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6050644439353463401}
+  - component: {fileID: 5438102654187471954}
   m_Layer: 0
   m_Name: Player2
   m_TagString: Player2
@@ -64,6 +65,34 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5438102654187471954
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6050644439353463400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e093a2cc03c6bc14395e8b120e9d9769, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 100
+  horizontal: 0
+  vertical: 0
+  attack1: 0
+  attack2: 0
+  attack3: 0
+  crouch: 0
+  canAttack: 0
+  gettingHit: 0
+  currentlyAttacking: 0
+  dontMove: 0
+  onGround: 0
+  lookRight: 0
+  handleMovement: {fileID: 0}
+  healthSlider: {fileID: 0}
+  movementColliders: []
 --- !u!1 &6050644439817144119
 GameObject:
   m_ObjectHideFlags: 0
