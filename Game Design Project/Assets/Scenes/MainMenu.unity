@@ -2882,6 +2882,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1891412958}
+  - component: {fileID: 1891412959}
   m_Layer: 0
   m_Name: CharacterManager
   m_TagString: Untagged
@@ -2904,6 +2905,38 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1891412959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1891412957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7376540dca7686f418cd4690401663e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nUsers: 2
+  plrs:
+  - playerId: Player 1
+    inputId: 0
+    hasCharacter: 1
+    playerPrefab: {fileID: 3124376902284108200, guid: 64e8d3db1a54b764bb568b7fad320323,
+      type: 3}
+    playerStates: {fileID: 0}
+    score: 0
+  - playerId: Player 2
+    inputId: 1
+    hasCharacter: 1
+    playerPrefab: {fileID: 6050644439353463400, guid: ec75f2ef9a5543548a778445957e122b,
+      type: 3}
+    playerStates: {fileID: 0}
+    score: 0
+  characterList:
+  - charId: fighter1
+    prefab: {fileID: 1925873226565265906, guid: 2553cec8fdb3eb643bbe9f2ec880c472,
+      type: 3}
 --- !u!1 &1915753258
 GameObject:
   m_ObjectHideFlags: 0
