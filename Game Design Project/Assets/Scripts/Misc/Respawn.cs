@@ -2,15 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem.XR;
+using UnityEngine.Rendering;
 
 public class Respawn : MonoBehaviour
 {
     private GameObject playerObj = null;
     private float timeOnHold = 2;
     private bool respawned = false;
-    private float initialGravity;
-    private PlayerController moveScript;
-    private CharacterController controller;
+    private InputHandler ih;
+    private Rigidbody2D rb;
     private BlinkingObject blinkingObject;
     private GameObject spawn;
 
@@ -20,11 +20,10 @@ public class Respawn : MonoBehaviour
         if (playerObj == null)
             playerObj = this.gameObject;
 
+        rb = GetComponent<Rigidbody2D>();
         spawn = GameObject.FindGameObjectWithTag("Spawn1");
-        controller = playerObj.GetComponent<CharacterController>();
-        moveScript = playerObj.GetComponent<PlayerController>();
+        ih = playerObj.GetComponent<InputHandler>();
         blinkingObject = playerObj.GetComponent<BlinkingObject>();
-        initialGravity = moveScript.getGravity();
 
     }
 
@@ -43,22 +42,20 @@ public class Respawn : MonoBehaviour
                 else
                 {
                     blinkingObject.blinkOff();
-                    controller.enabled = true;
-                    moveScript.setGravity(initialGravity); // gravedad de vuelta
+                    rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+                    ih.enabled = true;
                     respawned = false;
                 }
             }
             else if (playerObj.transform.position.y <= -7)
             {
 
-                controller.enabled = false;
-                Debug.Log("falling" + playerObj.transform.position.y);
+                ih.enabled = false;
                 playerObj.transform.position = spawn.transform.position;
-
+                rb.constraints = RigidbodyConstraints2D.FreezePositionY;
                 respawned = true;
                 timeOnHold = 2;
                 blinkingObject.blinkOn(); // Starts blinking
-                moveScript.setGravity(0.0f);// gravedad a 0
             }
         }
     }

@@ -21,30 +21,27 @@ public class StateManager : MonoBehaviour
     public bool onGround;
     public bool lookRight;
 
-    public PlayerController handleMovement;
-
     public Slider healthSlider;
     SpriteRenderer sRenderer;
 
-    /*
     [HideInInspector]
     public HandleDamageColliders handleDC;
     [HideInInspector]
     public HandleAnimations handleAnim;
     [HideInInspector]
     public HandleMovement handleMovement;
-    */
+    
 
     public GameObject[] movementColliders;
 
     // Start is called before the first frame update
     void Start()
     {
-       // handleDC = GetComponent<HandleDamageColliders>();
-       // handleAnim = GetComponent<HandleAnimations>();
-       // handleMovement = GetComponent<HandleMovement>();
+       handleDC = GetComponent<HandleDamageColliders>();
+       handleAnim = GetComponent<HandleAnimations>();
+       handleMovement = GetComponent<HandleMovement>();
 
-        sRenderer = GetComponent<SpriteRenderer>();
+       sRenderer = GetComponentInChildren(typeof(SpriteRenderer)) as SpriteRenderer;
     }
 
     private void FixedUpdate()
@@ -62,7 +59,7 @@ public class StateManager : MonoBehaviour
             if (LevelManager.GetInstance().countdown)
             {
                 LevelManager.GetInstance().EndTurnFunction();
-                //handleAnim.anim.Play("Dead");
+                handleAnim.anim.Play("Dead");
             }
             
         }

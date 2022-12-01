@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class CharacterManager : MonoBehaviour
 {
+    public bool solo;
     public int nUsers;
     public List<PlayerBase> plrs = new List<PlayerBase>();
 
@@ -35,6 +36,22 @@ public class CharacterManager : MonoBehaviour
                 retVal = plrs[i];
                 break;
             }
+
+        return retVal;
+    }
+
+    public int ReturnCharacterInt(GameObject prefab)
+    {
+        int retVal = 0;
+
+        for (int i = 0; i < characterList.Count; i++)
+        {
+            if (characterList[i].prefab == prefab)
+            {
+                retVal = i;
+                break;
+            }
+        }
 
         return retVal;
     }

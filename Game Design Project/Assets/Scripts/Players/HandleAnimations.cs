@@ -1,21 +1,22 @@
-using System.Collections;
 using UnityEngine;
+using System.Collections;
 
 public class HandleAnimations : MonoBehaviour
 {
+
     public Animator anim;
     StateManager states;
 
     public float attackRate = .3f;
-    // public AttacksBase[] attacks = new AttacksBase[2];
+    public AttacksBase[] attacks = new AttacksBase[2];
 
     void Start()
     {
         states = GetComponent<StateManager>();
-        anim = GetComponent<Animator>();
+        anim = GetComponentInChildren<Animator>();
     }
 
-    private void FixedUpdate()
+    void FixedUpdate()
     {
         states.dontMove = anim.GetBool("DontMove");
 
@@ -23,18 +24,21 @@ public class HandleAnimations : MonoBehaviour
         anim.SetBool("OnAir", !states.onGround);
         anim.SetBool("Crouch", states.crouch);
 
-        float movement = Mathf.Abs(states.horizontal);
+        float movement = (states.lookRight) ? states.horizontal : -states.horizontal;
         anim.SetFloat("Movement", movement);
 
         if (states.vertical < 0)
+        {
             states.crouch = true;
+        }
         else
+        {
             states.crouch = false;
+        }
 
-        // HandleAttacks();
+        HandleAttacks();
     }
 
-    /*
     void HandleAttacks()
     {
         if (states.canAttack)
@@ -52,8 +56,8 @@ public class HandleAnimations : MonoBehaviour
 
                 if (attacks[0].attackTimer > attackRate || attacks[0].timesPressed >= 3)
                 {
-                    attacks[0].attack = false;
                     attacks[0].attackTimer = 0;
+                    attacks[0].attack = false;
                     attacks[0].timesPressed = 0;
                 }
             }
@@ -71,8 +75,8 @@ public class HandleAnimations : MonoBehaviour
 
                 if (attacks[1].attackTimer > attackRate || attacks[0].timesPressed >= 3)
                 {
-                    attacks[1].attack = false;
                     attacks[1].attackTimer = 0;
+                    attacks[1].attack = false;
                     attacks[1].timesPressed = 0;
                 }
             }
@@ -81,11 +85,11 @@ public class HandleAnimations : MonoBehaviour
         anim.SetBool("Attack1", attacks[0].attack);
         anim.SetBool("Attack2", attacks[1].attack);
     }
-    */
 
     public void JumpAnim()
     {
         anim.SetBool("Attack1", false);
+        anim.SetBool("Attack2", false);
         anim.SetBool("Jump", true);
         StartCoroutine(CloseBoolInAnim("Jump"));
     }
@@ -104,3 +108,4 @@ public class AttacksBase
     public float attackTimer;
     public int timesPressed;
 }
+

@@ -5,7 +5,7 @@ public class DoDamage : MonoBehaviour
 {
     StateManager states;
 
-    public HandleDamageCollider.DamageType damageType;
+    public HandleDamageColliders.DamageType damageType;
 
     private void Start()
     {
