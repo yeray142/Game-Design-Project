@@ -2930,7 +2930,7 @@ MonoBehaviour:
   - playerId: Player 2
     inputId: 1
     hasCharacter: 1
-    playerPrefab: {fileID: 6050644439353463400, guid: ec75f2ef9a5543548a778445957e122b,
+    playerPrefab: {fileID: 8011541975471237965, guid: ec75f2ef9a5543548a778445957e122b,
       type: 3}
     playerStates: {fileID: 0}
     score: 0
