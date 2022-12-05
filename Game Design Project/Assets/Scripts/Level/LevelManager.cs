@@ -3,12 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine.TextCore.Text;
+using Unity.VisualScripting;
+using System;
 
 public class LevelManager : MonoBehaviour
 {
 
     WaitForSeconds oneSec;//we will be using this a lot so we don't want to create a new one everytime, saves a few bytes this
-    public Transform[] spawnPositions;// the positions characters will spawn on
+    public Vector3[] spawnPositions;// the positions characters will spawn on
 
 
     CameraManager camM;
@@ -31,6 +33,11 @@ public class LevelManager : MonoBehaviour
         levelUI = LevelUI.Instance;
         camM = CameraManager.GetInstance();
 
+        //init spawn positions
+        spawnPositions = new Vector3[2];
+        spawnPositions[0] = GameObject.FindGameObjectWithTag("Spawn1").transform.position;
+        spawnPositions[1] = GameObject.FindGameObjectWithTag("Spawn2").transform.position;
+
         //init the WaitForSeconds
         oneSec = new WaitForSeconds(1);
 
@@ -45,17 +52,22 @@ public class LevelManager : MonoBehaviour
     {
         //A fast way to handle player orientation in the scene
         //just compare the x of the first player, if it's lower then the enemy is on the right
-        if (charM.plrs[0].playerStates.transform.position.x <
+
+        if(charM != null && charM.plrs.Count == 2)
+        {
+            if (charM.plrs[0].playerStates.transform.position.x <
             charM.plrs[1].playerStates.transform.position.x)
-        {
-            charM.plrs[0].playerStates.lookRight = true;
-            charM.plrs[1].playerStates.lookRight = false;
+            {
+                charM.plrs[0].playerStates.lookRight = true;
+                charM.plrs[1].playerStates.lookRight = false;
+            }
+            else
+            {
+                charM.plrs[0].playerStates.lookRight = false;
+                charM.plrs[1].playerStates.lookRight = true;
+            }
         }
-        else
-        {
-            charM.plrs[0].playerStates.lookRight = false;
-            charM.plrs[1].playerStates.lookRight = true;
-        }
+        
     }
 
     void Update()
@@ -123,7 +135,7 @@ public class LevelManager : MonoBehaviour
         {
             //and instantiate their prefabs
             GameObject go = Instantiate(charM.plrs[i].playerPrefab
-            , spawnPositions[i].position, Quaternion.identity)
+            , spawnPositions[i], Quaternion.identity)
             as GameObject;
 
             //and assign the needed references
@@ -145,7 +157,7 @@ public class LevelManager : MonoBehaviour
             charM.plrs[i].playerStates.health = 100;
             charM.plrs[i].playerStates.handleAnim.anim.Play("Locomotion");
             //charM.plrs[i].playerStates.transform.GetComponent<Animator>().Play("Locomotion");
-            charM.plrs[i].playerStates.transform.position = spawnPositions[i].position;
+            charM.plrs[i].playerStates.transform.position = spawnPositions[i];
         }
 
         yield return null;

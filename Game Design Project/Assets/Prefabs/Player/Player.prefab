@@ -131,7 +131,7 @@ Transform:
   m_GameObject: {fileID: 3124376902284108200}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -36.998, z: 109.436966}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5813981485236879867}
@@ -204,8 +204,8 @@ MonoBehaviour:
   handleAnim: {fileID: 0}
   handleMovement: {fileID: 0}
   movementColliders:
-  - {fileID: 1879805733872700379, guid: d05ab0f554dc6bb48b4d13e68ed1c023, type: 3}
-  - {fileID: 8294724109950332058, guid: 2a28dcb91ca27804b95937111f42040d, type: 3}
+  - {fileID: 5939941053525473398, guid: d05ab0f554dc6bb48b4d13e68ed1c023, type: 3}
+  - {fileID: 2127321002223424809, guid: 2a28dcb91ca27804b95937111f42040d, type: 3}
 --- !u!114 &3491412556617995352
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -257,11 +257,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageCollidersLeft:
-  - {fileID: 6467740120295640866, guid: 941ed96b4e7306d459d7ce40e396c115, type: 3}
-  - {fileID: 3229496229988590047, guid: 460eef8ed4c507e42b76119c5a77cc4c, type: 3}
+  - {fileID: 5833236103729576970, guid: 941ed96b4e7306d459d7ce40e396c115, type: 3}
+  - {fileID: 8239339828064010510, guid: 460eef8ed4c507e42b76119c5a77cc4c, type: 3}
   damageColldersRight:
-  - {fileID: 4649058108145898750, guid: 0fe7b5641d03643419efa3dc6605bb95, type: 3}
-  - {fileID: 393355156882116686, guid: 0609a8602750a4145bbd95010ab47730, type: 3}
+  - {fileID: 4170355129815036715, guid: 0fe7b5641d03643419efa3dc6605bb95, type: 3}
+  - {fileID: 2673395020893949972, guid: 0609a8602750a4145bbd95010ab47730, type: 3}
 --- !u!114 &6869981466064872013
 MonoBehaviour:
   m_ObjectHideFlags: 0
