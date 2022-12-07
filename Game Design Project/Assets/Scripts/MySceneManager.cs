@@ -17,7 +17,7 @@ public class MySceneManager : MonoBehaviour {
 
     void Start()
     {
-        chm = CharacterManager.Instance;
+        chm = CharacterManager.GetInstance();
     }
 
     public void CreateProgression()
@@ -27,7 +27,7 @@ public class MySceneManager : MonoBehaviour {
 
         List<int> usedCharacters = new List<int>();
 
-        int playerInt = chm.ReturnCharacterInt(chm.plrs[0].playerPrefab);
+        int playerInt = chm.ReturnCharacterInt(chm.players[0].playerPrefab);
         usedCharacters.Add(playerInt);
 
         if(progressionStages > chm.characterList.Count-1)
@@ -63,8 +63,8 @@ public class MySceneManager : MonoBehaviour {
         {
             targetId = progression[progIndex].levelID;
 
-            chm.plrs[1].playerPrefab = 
-                chm.returnCharacterFromID(progression[progIndex].charId).prefab;
+            chm.players[1].playerPrefab = 
+                chm.returnCharacterWithID(progression[progIndex].charId).prefab;
             
             progIndex++;         
         }

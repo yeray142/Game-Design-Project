@@ -1,8 +1,7 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
-public class InputHandler : MonoBehaviour
-{
+public class InputHandler : MonoBehaviour {
 
     public string playerInput;
 
@@ -33,5 +32,5 @@ public class InputHandler : MonoBehaviour
         states.attack2 = attack2;
         states.attack3 = attack3;
     }
-
+	
 }

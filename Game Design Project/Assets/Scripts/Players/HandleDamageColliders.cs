@@ -1,8 +1,7 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
-public class HandleDamageColliders : MonoBehaviour
-{
+public class HandleDamageColliders : MonoBehaviour {
 
     //public DCtype dcType;
 

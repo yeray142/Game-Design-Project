@@ -1,28 +1,28 @@
+﻿using UnityEngine;
 using System.Collections;
-using UnityEngine;
 
-public class DoDamage : MonoBehaviour
-{
+public class DoDamage : MonoBehaviour {
+
     StateManager states;
 
     public HandleDamageColliders.DamageType damageType;
 
-    private void Start()
+    void Start()
     {
         states = GetComponentInParent<StateManager>();
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    void OnTriggerEnter2D (Collider2D other)
     {
-        if (collision.GetComponentInParent<StateManager>())
+        if (other.GetComponentInParent<StateManager>())
         {
-            StateManager oState = collision.GetComponentInParent<StateManager>();
+            StateManager oState = other.GetComponentInParent<StateManager>();
 
-            if (oState != states)
+            if(oState != states)
             {
-                if (!oState.currentlyAttacking)
+                if(!oState.currentlyAttacking)
                 {
-                    // oState.TakeDamage(30, damageType);
+                    oState.TakeDamage(5, damageType);   
                 }
             }
         }

@@ -1,8 +1,7 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
-public class HandleMovement : MonoBehaviour
-{
+public class HandleMovement : MonoBehaviour {
 
     Rigidbody2D rb;
     StateManager states;
@@ -18,15 +17,14 @@ public class HandleMovement : MonoBehaviour
     bool canVariableJump;
     float jmpTimer;
 
-    void Start()
-    {
+	void Start () {
         rb = GetComponent<Rigidbody2D>();
         states = GetComponent<StateManager>();
         anim = GetComponent<HandleAnimations>();
         rb.freezeRotation = true;
-    }
-
-    void FixedUpdate()
+	}
+	
+	void FixedUpdate ()
     {
         if (!states.dontMove)
         {
@@ -39,7 +37,7 @@ public class HandleMovement : MonoBehaviour
     {
         actualSpeed = this.maxSpeed;
         if (states.onGround)
-        // if (states.onGround && !states.currentlyAttacking)
+           // if (states.onGround && !states.currentlyAttacking)
         {
             rb.AddForce(new Vector2((states.horizontal * actualSpeed) - rb.velocity.x * this.acceleration, 0));
         }
@@ -96,7 +94,7 @@ public class HandleMovement : MonoBehaviour
     {
         float t = 0;
 
-        while (t < timer)
+        while(t < timer)
         {
             t += Time.deltaTime;
 

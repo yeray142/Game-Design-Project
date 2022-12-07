@@ -1,9 +1,9 @@
-using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
-public class StateManager : MonoBehaviour
-{
+public class StateManager : MonoBehaviour {
+
     public int health = 100;
 
     public float horizontal;
@@ -30,49 +30,50 @@ public class StateManager : MonoBehaviour
     public HandleAnimations handleAnim;
     [HideInInspector]
     public HandleMovement handleMovement;
-    
 
     public GameObject[] movementColliders;
 
-    // Start is called before the first frame update
+    ParticleSystem blood;
+
     void Start()
     {
-       handleDC = GetComponent<HandleDamageColliders>();
-       handleAnim = GetComponent<HandleAnimations>();
-       handleMovement = GetComponent<HandleMovement>();
-
-       sRenderer = GetComponentInChildren(typeof(SpriteRenderer)) as SpriteRenderer;
+        handleDC = GetComponent<HandleDamageColliders>();
+        handleAnim = GetComponent<HandleAnimations>();
+        handleMovement = GetComponent<HandleMovement>();
+        sRenderer = GetComponentInChildren<SpriteRenderer>();
+        blood = GetComponentInChildren<ParticleSystem>();
     }
 
-    private void FixedUpdate()
-    {
-        sRenderer.flipX = lookRight;
+	void FixedUpdate () {
+
+        sRenderer.flipX = !lookRight;
 
         onGround = isOnGround();
 
-        if (healthSlider != null)
-            healthSlider.value = health * 0.01f;
+        if(healthSlider != null)
+        {
+            healthSlider.value =health * 0.01f;
+        }
 
         if (health <= 0)
         {
-            
             if (LevelManager.GetInstance().countdown)
             {
                 LevelManager.GetInstance().EndTurnFunction();
+
                 handleAnim.anim.Play("Dead");
             }
-            
         }
-    }
+	}
 
     bool isOnGround()
     {
-        bool ret = false;
+        bool retVal = false;
 
         LayerMask layer = ~(1 << gameObject.layer | 1 << 3);
-        ret = Physics2D.Raycast(transform.position, -Vector2.up, 0.1f, layer);
+        retVal = Physics2D.Raycast(transform.position, -Vector2.up, 0.1f, layer);
 
-        return ret;
+        return retVal;
     }
 
     public void ResetStateInputs()
@@ -88,42 +89,44 @@ public class StateManager : MonoBehaviour
         dontMove = false;
     }
 
-    public void CloseMovementCollider(int i)
+    public void CloseMovementCollider(int index)
     {
-        movementColliders[i].SetActive(false);
+        movementColliders[index].SetActive(false);
     }
 
-    public void OpenMovementCollider(int i)
+    public void OpenMovementCollider(int index)
     {
-        movementColliders[i].SetActive(true);
+        movementColliders[index].SetActive(true);
     }
 
-    /*
     public void TakeDamage(int damage, HandleDamageColliders.DamageType damageType)
     {
         if (!gettingHit)
         {
             switch (damageType)
             {
-                case HandleDamageColliders.DamageType.ligth:
-                    StartCoroutine(CloseInmortality(0.3f));
+                case HandleDamageColliders.DamageType.light:
+                    StartCoroutine(CloseImmortality(0.3f));
                     break;
                 case HandleDamageColliders.DamageType.heavy:
                     handleMovement.AddVelocityOnCharacter(
-                        ((!lookRight) ? Vector3.right * 1 : Vector3.right * -1) + Vector3.up,
-                        0.5f
+                        ((!lookRight) ? Vector3.right * 1 : Vector3.right * -1) + Vector3.up
+                        , 0.5f
                         );
-                    StartCoroutine(CloseInmortality(1));
+
+                    StartCoroutine(CloseImmortality(1));
                     break;
             }
+
+            if(blood != null)
+                blood.Emit(30);
 
             health -= damage;
             gettingHit = true;
         }
     }
-    */
 
-    IEnumerator CloseInmortality(float timer)
+    IEnumerator CloseImmortality(float timer)
     {
         yield return new WaitForSeconds(timer);
         gettingHit = false;

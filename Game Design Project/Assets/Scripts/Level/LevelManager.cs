@@ -1,16 +1,12 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
-using UnityEngine.TextCore.Text;
-using Unity.VisualScripting;
-using System;
 
-public class LevelManager : MonoBehaviour
-{
-
+public class LevelManager : MonoBehaviour {
+    
     WaitForSeconds oneSec;//we will be using this a lot so we don't want to create a new one everytime, saves a few bytes this
-    public Vector3[] spawnPositions;// the positions characters will spawn on
+    public Transform[] spawnPositions;// the positions characters will spawn on
 
 
     CameraManager camM;
@@ -26,48 +22,66 @@ public class LevelManager : MonoBehaviour
     int currentTimer;
     float internalTimer;
 
-    void Start()
-    {
+	void Start () {
         //get the references from the singletons
-        charM = CharacterManager.Instance;
-        levelUI = LevelUI.Instance;
+        charM = CharacterManager.GetInstance();
+        levelUI = LevelUI.GetInstance();
         camM = CameraManager.GetInstance();
-
-        //init spawn positions
-        spawnPositions = new Vector3[2];
-        spawnPositions[0] = GameObject.FindGameObjectWithTag("Spawn1").transform.position;
-        spawnPositions[1] = GameObject.FindGameObjectWithTag("Spawn2").transform.position;
 
         //init the WaitForSeconds
         oneSec = new WaitForSeconds(1);
 
-        levelUI.AnnouncerTextLine.gameObject.SetActive(false);
-        //levelUI.AnnouncerTextLine2.gameObject.SetActive(false);
+        levelUI.AnnouncerTextLine1.gameObject.SetActive(false);
+        levelUI.AnnouncerTextLine2.gameObject.SetActive(false);
 
         StartCoroutine("StartGame");
-
-    }
+       
+	}
 
     void FixedUpdate()
     {
-        //A fast way to handle player orientation in the scene
-        //just compare the x of the first player, if it's lower then the enemy is on the right
+        charM.players[0].playerStates.lookRight = charM.players[0].playerStates.horizontal > 0;
+        charM.players[1].playerStates.lookRight = charM.players[1].playerStates.horizontal > 0;
 
-        if(charM != null && charM.plrs.Count == 2)
+        if (charM.players[0].playerStates.horizontal == 0)
         {
-            if (charM.plrs[0].playerStates.transform.position.x <
-            charM.plrs[1].playerStates.transform.position.x)
+            if (charM.players[0].playerStates.transform.position.x <
+            charM.players[1].playerStates.transform.position.x)
             {
-                charM.plrs[0].playerStates.lookRight = true;
-                charM.plrs[1].playerStates.lookRight = false;
+                charM.players[0].playerStates.lookRight = true;
             }
             else
             {
-                charM.plrs[0].playerStates.lookRight = false;
-                charM.plrs[1].playerStates.lookRight = true;
+                charM.players[0].playerStates.lookRight = false;
             }
         }
-        
+
+        if (charM.players[1].playerStates.horizontal == 0)
+        {
+            if (charM.players[1].playerStates.transform.position.x <
+            charM.players[0].playerStates.transform.position.x)
+            {
+                charM.players[1].playerStates.lookRight = true;
+            }
+            else
+            {
+                charM.players[1].playerStates.lookRight = false;
+            }
+        }
+        //A fast way to handle player orientation in the scene
+        //just compare the x of the first player, if it's lower then the enemy is on the right
+        /*
+        if(charM.players[0].playerStates.transform.position.x < 
+            charM.players[1].playerStates.transform.position.x)
+        {
+            charM.players[0].playerStates.lookRight = true;
+            charM.players[1].playerStates.lookRight = false;
+        }
+        else
+        {
+            charM.players[0].playerStates.lookRight = false;
+            charM.players[1].playerStates.lookRight = true;
+        }*/
     }
 
     void Update()
@@ -100,48 +114,48 @@ public class LevelManager : MonoBehaviour
     IEnumerator StartGame()
     {
         //when we first start the game
-
-        //we need to create the plrs first
-        yield return Createplrs();
+        
+        //we need to create the players first
+        yield return CreatePlayers();
 
         //then initialize the turn
         yield return InitTurn();
     }
-
+	
     IEnumerator InitTurn()
     {
         //to init the turn
 
         //disable the announcer texts first
-        levelUI.AnnouncerTextLine.gameObject.SetActive(false);
-        //levelUI.AnnouncerTextLine2.gameObject.SetActive(false);
+        levelUI.AnnouncerTextLine1.gameObject.SetActive(false);
+        levelUI.AnnouncerTextLine2.gameObject.SetActive(false);
 
         //reset the timer
         currentTimer = maxTurnTimer;
         countdown = false;
 
-        //start initiliazing the plrs
-        yield return Initplrs();
+        //start initiliazing the players
+        yield return InitPlayers();
 
         //and then start the coroutine to enable the controls of each player
         yield return EnableControl();
 
     }
 
-    IEnumerator Createplrs()
+    IEnumerator CreatePlayers()
     {
-        //go to all the plrs we have in our list
-        for (int i = 0; i < charM.plrs.Count; i++)
+        //go to all the players we have in our list
+        for (int i = 0; i < charM.players.Count; i++)
         {
             //and instantiate their prefabs
-            GameObject go = Instantiate(charM.plrs[i].playerPrefab
-            , spawnPositions[i], Quaternion.identity)
+            GameObject go = Instantiate(charM.players[i].playerPrefab
+            , spawnPositions[i].position, Quaternion.identity)
             as GameObject;
 
             //and assign the needed references
-            charM.plrs[i].playerStates = go.GetComponent<StateManager>();
+            charM.players[i].playerStates = go.GetComponent<StateManager>();
 
-            charM.plrs[i].playerStates.healthSlider = levelUI.playerHealthbar[i];
+            charM.players[i].playerStates.healthSlider = levelUI.healthSliders[i];
 
             camM.players.Add(go.transform);
         }
@@ -149,100 +163,89 @@ public class LevelManager : MonoBehaviour
         yield return null;
     }
 
-    IEnumerator Initplrs()
+    IEnumerator InitPlayers()
     {
         //right now, the only thing we have to do is reset their health
-        for (int i = 0; i < charM.plrs.Count; i++)
+        for (int i = 0; i < charM.players.Count; i++)
         {
-            charM.plrs[i].playerStates.health = 100;
-            charM.plrs[i].playerStates.handleAnim.anim.Play("Locomotion");
-            //charM.plrs[i].playerStates.transform.GetComponent<Animator>().Play("Locomotion");
-            charM.plrs[i].playerStates.transform.position = spawnPositions[i];
+            charM.players[i].playerStates.health = 100;
+            charM.players[i].playerStates.handleAnim.anim.Play("Locomotion");
+            //charM.players[i].playerStates.transform.GetComponent<Animator>().Play("Locomotion");
+            charM.players[i].playerStates.transform.position = spawnPositions[i].position;
         }
 
         yield return null;
     }
 
-    IEnumerator EnableControl()
+	IEnumerator EnableControl()
     {
         //start with the announcer text
 
-        levelUI.AnnouncerTextLine.gameObject.SetActive(true);
-        levelUI.AnnouncerTextLine.text = "Turn " + currentTurn;
-        levelUI.AnnouncerTextLine.color = Color.white;
+        levelUI.AnnouncerTextLine1.gameObject.SetActive(true);
+        levelUI.AnnouncerTextLine1.text = "Turn " + currentTurn;
+        levelUI.AnnouncerTextLine1.color = Color.white;
         yield return oneSec;
         yield return oneSec;
 
         //change the UI text and color every second that passes
-        levelUI.AnnouncerTextLine.text = "3";
-        levelUI.AnnouncerTextLine.color = Color.green;
+        levelUI.AnnouncerTextLine1.text = "3";
+        levelUI.AnnouncerTextLine1.color = Color.green;
         yield return oneSec;
-        levelUI.AnnouncerTextLine.text = "2";
-        levelUI.AnnouncerTextLine.color = Color.yellow;
+        levelUI.AnnouncerTextLine1.text = "2";
+        levelUI.AnnouncerTextLine1.color = Color.yellow;
         yield return oneSec;
-        levelUI.AnnouncerTextLine.text = "1";
-        levelUI.AnnouncerTextLine.color = Color.red;
+        levelUI.AnnouncerTextLine1.text = "1";
+        levelUI.AnnouncerTextLine1.color = Color.red;
         yield return oneSec;
-        levelUI.AnnouncerTextLine.color = Color.red;
-        levelUI.AnnouncerTextLine.text = "FIGHT!";
+        levelUI.AnnouncerTextLine1.color = Color.red;
+        levelUI.AnnouncerTextLine1.text = "FIGHT!";
 
         //and for every player enable what they need to have open to be controlled
-        for (int i = 0; i < charM.plrs.Count; i++)
+        for (int i = 0; i < charM.players.Count; i++)
         {
-            InputHandler ih = charM.plrs[i].playerStates.gameObject.GetComponent<InputHandler>();
-            ih.playerInput = charM.plrs[i].inputId.ToString();
-            ih.enabled = true;
-
-            /*
-            //for user plrs, enable the input handler for example
-            if (charM.plrs[i].playerType == PlayerBase.PlayerType.user)
+            //for user players, enable the input handler for example
+            if(charM.players[i].playerType == PlayerBase.PlayerType.user)
             {
-                InputHandler ih = charM.plrs[i].playerStates.gameObject.GetComponent<InputHandler>();
-                ih.playerInput = charM.plrs[i].inputId.ToString();
+                InputHandler ih = charM.players[i].playerStates.gameObject.GetComponent<InputHandler>();
+                ih.playerInput = charM.players[i].inputId;
                 ih.enabled = true;
             }
 
             //If it's an AI character
-            
-            if (charM.plrs[i].playerType == PlayerBase.PlayerType.ai)
-            {
-                AICharacter ai = charM.plrs[i].playerStates.gameObject.GetComponent<AICharacter>();
-                ai.enabled = true;
-
-                //assign the enemy states to be the one from the opposite player
-                ai.enStates = charM.returnOppositePlater(charM.plrs[i]).playerStates;
-            }
-            */
+             if(charM.players[i].playerType == PlayerBase.PlayerType.ai)
+             {
+                 AICharacter ai = charM.players[i].playerStates.gameObject.GetComponent<AICharacter>();
+                 ai.enabled = true;
+                 
+                 //assign the enemy states to be the one from the opposite player
+                 ai.enStates = charM.returnOppositePlater(charM.players[i]).playerStates;
+             }
         }
 
         //after a second, disable the announcer text
         yield return oneSec;
-        levelUI.AnnouncerTextLine.gameObject.SetActive(false);
+        levelUI.AnnouncerTextLine1.gameObject.SetActive(false);
         countdown = true;
-    }
+    } 
 
     void DisableControl()
     {
         //to disable the controls, you need to disable the component that makes a character controllable
-        for (int i = 0; i < charM.plrs.Count; i++)
+        for (int i = 0; i < charM.players.Count; i++)
         {
             //but first, reset the variables in their state manager 
-            charM.plrs[i].playerStates.ResetStateInputs();
+            charM.players[i].playerStates.ResetStateInputs();
 
-            charM.plrs[i].playerStates.GetComponent<InputHandler>().enabled = false;
-
-            /*
-            //for user plrs, that's the input handler
-            if (charM.plrs[i].playerType == PlayerBase.PlayerType.user)
+            //for user players, that's the input handler
+            if(charM.players[i].playerType == PlayerBase.PlayerType.user)
             {
-                charM.plrs[i].playerStates.GetComponent<InputHandler>().enabled = false;
+                charM.players[i].playerStates.GetComponent<InputHandler>().enabled = false;
             }
 
-            if (charM.plrs[i].playerType == PlayerBase.PlayerType.ai)
+            if(charM.players[i].playerType == PlayerBase.PlayerType.ai)
             {
-                charM.plrs[i].playerStates.GetComponent<AICharacter>().enabled = false;
+                charM.players[i].playerStates.GetComponent<AICharacter>().enabled = false;
             }
-            */
         }
     }
 
@@ -253,21 +256,21 @@ public class LevelManager : MonoBehaviour
          */
         countdown = false;
         //reset the timer text
-        levelUI.LevelTimer.text = maxTurnTimer.ToString();
+        levelUI.LevelTimer.text = maxTurnTimer.ToString() ;
 
         //if it's a timeout
         if (timeOut)
         {
             //add this text first
-            levelUI.AnnouncerTextLine.gameObject.SetActive(true);
-            levelUI.AnnouncerTextLine.text = "Time Out!";
-            levelUI.AnnouncerTextLine.color = Color.cyan;
+            levelUI.AnnouncerTextLine1.gameObject.SetActive(true);
+            levelUI.AnnouncerTextLine1.text = "Time Out!";
+            levelUI.AnnouncerTextLine1.color = Color.cyan;
         }
         else
         {
-            levelUI.AnnouncerTextLine.gameObject.SetActive(true);
-            levelUI.AnnouncerTextLine.text = "K.O.";
-            levelUI.AnnouncerTextLine.color = Color.red;
+            levelUI.AnnouncerTextLine1.gameObject.SetActive(true);
+            levelUI.AnnouncerTextLine1.text = "K.O.";
+            levelUI.AnnouncerTextLine1.color = Color.red;
         }
 
         //disable the controlls
@@ -287,17 +290,17 @@ public class LevelManager : MonoBehaviour
         //find who was the player that won
         PlayerBase vPlayer = FindWinningPlayer();
 
-        if (vPlayer == null) //if our function returned a null
+        if(vPlayer == null) //if our function returned a null
         {
             //that means it's a draw
-            levelUI.AnnouncerTextLine.text = "Draw";
-            levelUI.AnnouncerTextLine.color = Color.blue;
+            levelUI.AnnouncerTextLine1.text = "Draw";
+            levelUI.AnnouncerTextLine1.color = Color.blue;
         }
         else
         {
             //else that player is the winner
-            levelUI.AnnouncerTextLine.text = vPlayer.playerId + " Wins!";
-            levelUI.AnnouncerTextLine.color = Color.red;
+            levelUI.AnnouncerTextLine1.text = vPlayer.playerId + " Wins!";
+            levelUI.AnnouncerTextLine1.color = Color.red;
         }
 
         //wait 3 more seconds
@@ -311,8 +314,8 @@ public class LevelManager : MonoBehaviour
             //if not, then it's a flawless victory
             if (vPlayer.playerStates.health == 100)
             {
-                levelUI.AnnouncerTextLine.gameObject.SetActive(true);
-                levelUI.AnnouncerTextLine.text = "Flawless Victory!";
+                levelUI.AnnouncerTextLine2.gameObject.SetActive(true);
+                levelUI.AnnouncerTextLine2.text = "Flawless Victory!";
             }
         }
 
@@ -331,15 +334,15 @@ public class LevelManager : MonoBehaviour
         }
         else
         {
-            for (int i = 0; i < charM.plrs.Count; i++)
+            for (int i = 0; i < charM.players.Count; i++)
             {
-                charM.plrs[i].score = 0;
-                charM.plrs[i].hasCharacter = false;
+                charM.players[i].score = 0;
+                charM.players[i].hasCharacter = false;
             }
 
             if (charM.solo)
             {
-                if (vPlayer == charM.plrs[0])
+                if(vPlayer == charM.players[0])
                     MySceneManager.GetInstance().LoadNextOnProgression();
                 else
                     MySceneManager.GetInstance().RequestLevelLoad(SceneType.main, "game_over");
@@ -350,14 +353,14 @@ public class LevelManager : MonoBehaviour
             }
         }
     }
-
+  
     bool isMatchOver()
     {
         bool retVal = false;
 
-        for (int i = 0; i < charM.plrs.Count; i++)
+        for (int i = 0; i < charM.players.Count; i++)
         {
-            if (charM.plrs[i].score >= maxTurns)
+            if(charM.players[i].score >= maxTurns)
             {
                 retVal = true;
                 break;
@@ -374,24 +377,24 @@ public class LevelManager : MonoBehaviour
 
         StateManager targetPlayer = null;
 
-        //check first to see if both plrs have equal health
-        if (charM.plrs[0].playerStates.health != charM.plrs[1].playerStates.health)
+        //check first to see if both players have equal health
+        if(charM.players[0].playerStates.health != charM.players[1].playerStates.health)
         {
             //if not, then check who has the lower health, the other one is the winner
-            if (charM.plrs[0].playerStates.health < charM.plrs[1].playerStates.health)
+            if(charM.players[0].playerStates.health < charM.players[1].playerStates.health)
             {
-                charM.plrs[1].score++;
-                targetPlayer = charM.plrs[1].playerStates;
+                charM.players[1].score++;
+                targetPlayer = charM.players[1].playerStates;
                 levelUI.AddWinIndicator(1);
             }
             else
             {
-                charM.plrs[0].score++;
-                targetPlayer = charM.plrs[0].playerStates;
+                charM.players[0].score++;
+                targetPlayer = charM.players[0].playerStates;
                 levelUI.AddWinIndicator(0);
             }
 
-            retVal = charM.returnPlayerFromStates(targetPlayer);
+            retVal = charM.returnPlayerFromStates(targetPlayer); 
         }
 
         return retVal;
@@ -407,5 +410,6 @@ public class LevelManager : MonoBehaviour
     {
         instance = this;
     }
-
+   
 }
+

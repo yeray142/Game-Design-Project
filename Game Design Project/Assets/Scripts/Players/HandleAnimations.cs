@@ -1,8 +1,7 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
-public class HandleAnimations : MonoBehaviour
-{
+public class HandleAnimations : MonoBehaviour {
 
     public Animator anim;
     StateManager states;
@@ -10,13 +9,13 @@ public class HandleAnimations : MonoBehaviour
     public float attackRate = .3f;
     public AttacksBase[] attacks = new AttacksBase[2];
 
-    void Start()
+	void Start () 
     {
         states = GetComponent<StateManager>();
         anim = GetComponentInChildren<Animator>();
-    }
+	}
 
-    void FixedUpdate()
+	void FixedUpdate () 
     {
         states.dontMove = anim.GetBool("DontMove");
 
@@ -24,10 +23,10 @@ public class HandleAnimations : MonoBehaviour
         anim.SetBool("OnAir", !states.onGround);
         anim.SetBool("Crouch", states.crouch);
 
-        float movement = (states.lookRight) ? states.horizontal : -states.horizontal;
+        float movement =(states.lookRight)? states.horizontal : -states.horizontal;
         anim.SetFloat("Movement", movement);
 
-        if (states.vertical < 0)
+        if(states.vertical < 0)
         {
             states.crouch = true;
         }
@@ -37,8 +36,8 @@ public class HandleAnimations : MonoBehaviour
         }
 
         HandleAttacks();
-    }
-
+	}
+ 
     void HandleAttacks()
     {
         if (states.canAttack)
@@ -50,11 +49,11 @@ public class HandleAnimations : MonoBehaviour
                 attacks[0].timesPressed++;
             }
 
-            if (attacks[0].attack)
+            if(attacks[0].attack)
             {
                 attacks[0].attackTimer += Time.deltaTime;
 
-                if (attacks[0].attackTimer > attackRate || attacks[0].timesPressed >= 3)
+                if(attacks[0].attackTimer > attackRate || attacks[0].timesPressed >= 3)
                 {
                     attacks[0].attackTimer = 0;
                     attacks[0].attack = false;
@@ -91,7 +90,7 @@ public class HandleAnimations : MonoBehaviour
         anim.SetBool("Attack1", false);
         anim.SetBool("Attack2", false);
         anim.SetBool("Jump", true);
-        StartCoroutine(CloseBoolInAnim("Jump"));
+        StartCoroutine(CloseBoolInAnim("Jump"));  
     }
 
     IEnumerator CloseBoolInAnim(string name)
@@ -108,4 +107,4 @@ public class AttacksBase
     public float attackTimer;
     public int timesPressed;
 }
-
+    
